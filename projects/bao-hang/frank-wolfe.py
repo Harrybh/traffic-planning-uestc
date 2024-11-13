@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 from scipy.optimize import minimize_scalar
 
 def build_network(Link_path, Node_path):
@@ -38,6 +39,12 @@ def draw_network(G):
     nx.draw_networkx_edges(G, pos, edgelist=G.edges, width=widths, edge_color=colors, arrows=False)
     print("绘制网络图")
     nx.draw_networkx_labels(G, pos, font_size=10, font_family="sans-serif")
+    max_weight = max(weights)
+    legend_lines = [
+        mlines.Line2D([], [], color='blue', linewidth= w*10/max_weight, label=f'flow_real: {round(w, 2)}')
+        for w in sorted(set(widths))
+    ]
+    plt.legend(handles=legend_lines, loc='best', fontsize=10)
     '''edge_labels = {(u, v): f'{d["flow_real"]}' for u, v, d in G.edges(data=True)}
     nx.draw_networkx_edge_labels(G, pos, edge_labels=edge_labels)'''
     plt.show()
